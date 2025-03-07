@@ -1,3 +1,5 @@
+$VENV_HOME = ".\.venv\"
+
 # Change PYTHON_HOME if needed
 # **Windows
 #$PYTHON_HOME = "D:\python\Python312"
@@ -7,8 +9,6 @@
 $PYTHON_HOME = "\usr\bin"
 $VENV_ACTIVATION_SCRIPT = "$VENV_HOME\bin\Activate.ps1"
 #**
-
-$VENV_HOME = ".\.venv\"
 
 Write-Output "*************Look PYTHON in: $PYTHON_HOME"
 Write-Output "*************Expected VENV dir in: $VENV_HOME"

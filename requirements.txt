@@ -1,2 +1,5 @@
 yt-dlp
 ffmpeg
+Pillow
+# For packaging stuff as an exe
+pyinstaller
