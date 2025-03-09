@@ -13,6 +13,11 @@ After running `setup.ps1`, you can run `source .venv\bin\activate` in `bash` to 
 - Need to add `--hidden-import='PIL._tkinter_finder'` to the command or you will get
 >ModuleNotFoundError: No module named 'PIL._tkinter_finder'
 
-- Copy `asssets` folder into `dist/<programname>/` so the asset can be found
+- Copy `asssets` folder into `dist/<program name>/` so the asset can be found
 
 Example: `pyinstaller test.py --hidden-import='PIL._tkinter_finder'`
+
+## Windows
+Add `-w` so it won't open a command prompt when it run
+
+Example `pyinstaller VideopDownloader.py --hidden-import='PIL._tkinter_finder' -w`
