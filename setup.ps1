@@ -2,12 +2,12 @@ $VENV_HOME = ".\.venv\"
 
 # Change PYTHON_HOME if needed
 # **Windows
-#$PYTHON_HOME = "D:\python\Python312"
-#$VENV_ACTIVATION_SCRIPT = "$VENV_HOME\Scripts\Activate.ps1"
+$PYTHON_HOME = "D:\python\Python312"
+$VENV_ACTIVATION_SCRIPT = "$VENV_HOME\Scripts\Activate.ps1"
 #**
 # ** Arch Linux, Install `powershell-bin` from `AUR` with `yay` for powershell
-$PYTHON_HOME = "\usr\bin"
-$VENV_ACTIVATION_SCRIPT = "$VENV_HOME\bin\Activate.ps1"
+#$PYTHON_HOME = "\usr\bin"
+#$VENV_ACTIVATION_SCRIPT = "$VENV_HOME\bin\Activate.ps1"
 #**
 
 Write-Output "*************Look PYTHON in: $PYTHON_HOME"

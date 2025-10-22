@@ -18,6 +18,8 @@ After running `setup.ps1`, you can run `source .venv\bin\activate` in `bash` to 
 Example: `pyinstaller test.py --hidden-import='PIL._tkinter_finder'`
 
 ## Windows
+! Need to install `ffmpeg` for tool to work.
+
 Add `-w` so it won't open a command prompt when it run
 
 Example `pyinstaller VideopDownloader.py --hidden-import='PIL._tkinter_finder' -w`
