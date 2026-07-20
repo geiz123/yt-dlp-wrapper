@@ -1,5 +1,8 @@
 # yt-dlp-wrapper
- Basic GUI for yt-dlp that download videos from streaming website.
+Basic GUI for yt-dlp that download videos from streaming website.
+
+# Requirements
+> Need to install `ffmpeg` for tool to work.
 
 # MacOs
 Run `setup_mac.sh`. Modify it to change where your `python3` was installed.
@@ -23,7 +26,6 @@ After running `setup.ps1`, you can run `source .venv\bin\activate` in `bash` to 
 Example: `pyinstaller test.py --hidden-import='PIL._tkinter_finder'`
 
 ## Windows
-> Need to install `ffmpeg` for tool to work.
 
 Add `-w` so it won't open a command prompt when it run
 

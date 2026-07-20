@@ -15,6 +15,9 @@ import tkinter as tk
 import tkinter.messagebox as tkMessageBox
 from PIL import ImageTk
 
+# Custom extractor. Need more research to add to offical yt-dlp repo
+from yt_dlp_plugins.extractor.tvbanywhere import TVBAnywhereIE
+
 LOGGER=logging.getLogger(__name__)
 
 # ydlOpts = \
@@ -127,6 +130,8 @@ def downloadVideo(url):
 
     with YoutubeDL(ydl_opts) as ydl:
         try:
+            # add our custom extractor
+            ydl.add_info_extractor(TVBAnywhereIE())
             return ydl.download(url)
         except Exception as e:
             # LOGGER.exception(e)
