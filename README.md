@@ -1,6 +1,23 @@
 # yt-dlp-wrapper
 Basic GUI for yt-dlp that download videos from streaming website.
 
+## Build command
+Make sure you are in .venv
+```
+cd /Users/geiz/Desktop/git/yt-dlp-wrapper/src
+
+rm -rf build dist VideoDownloader.spec
+
+pyinstaller \
+    --windowed \
+    --clean \
+    --name VideoDownloader \
+    --hidden-import custom_extractor.tvbanywhere \
+    --collect-submodules yt_dlp \
+    --add-data "../assets:assets" \
+    VideoDownloader.py
+```
+
 # Requirements
 > Need to install `ffmpeg` for tool to work.
 
