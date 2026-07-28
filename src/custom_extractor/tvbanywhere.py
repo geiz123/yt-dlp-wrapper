@@ -7,11 +7,8 @@ from yt_dlp.extractor.common import InfoExtractor
 class TVBAnywhereIE(InfoExtractor):
     IE_NAME = 'tvbanywhere'
 
-    _VALID_URL = (
-        r'https?://(?:www\.)?tvbanywherena\.com/'
-        r'(?:[a-z]{2}/)?watch/[^/]+/(?P<id>\d+)'
-    )
-
+    _VALID_URL = r'https?://(?:www\.)?tvbanywherena\.com/(?:[a-z]{2}/)?watch/[^/?#]+/(?P<id>\d+)(?:[/?#].*)?$'
+    
     _TESTS = [{
         'url': 'https://tvbanywherena.com/vn/watch/3688-The-Map-Of-Truth/1865291940319844006',
         'info_dict': {
@@ -170,4 +167,10 @@ class TVBAnywhereIE(InfoExtractor):
             'thumbnails': thumbnails,
             'subtitles': subtitles,
             'formats': formats,
+
+            # Required metadata
+            'extractor': self.IE_NAME,
+            'extractor_key': self.ie_key(),
+            'webpage_url': url,
+            'webpage_url_basename': video_id,
         }
