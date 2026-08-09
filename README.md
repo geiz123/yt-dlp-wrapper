@@ -21,6 +21,14 @@ pyinstaller \
 # Requirements
 > Need to install `ffmpeg` for tool to work.
 
+## MacOs
+```bash
+brew install ffmpeg
+```
+The program expects it to be installed here: `/opt/homebrew/bin`
+## Windows
+Google it.
+
 # MacOs
 Run `setup_mac.sh`. Modify it to change where your `python3` was installed.
 

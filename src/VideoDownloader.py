@@ -1,4 +1,5 @@
 import os
+import platform
 import sys
 from pathlib import Path
 # disable yt-dlp plugin discovery because we add them manually
@@ -13,24 +14,11 @@ import logging
 if getattr(sys, "frozen", False):
     # PyInstaller executable or .app bundle
     app_dir = Path(sys.executable)
-    print(1)
-    print(app_dir)
-    print("sys plat:")
-    print(sys.platform)
-    print("app_dir.parent.name:")
-    print(app_dir.parent.name)
     # macOS .app bundle
     if sys.platform == "darwin":
         app_dir = app_dir.parents[3]  # folder containing MyApp.app
-        print(2)
-        print(app_dir)
 else:
     app_dir = Path(__file__).resolve().parent
-    print(3)
-    print(app_dir)
-
-print("App Dir: ")
-print(app_dir)
 
 # Configure the logger
 # os.makedirs(app_dir, exist_ok=True)
@@ -99,24 +87,31 @@ try:
     # frame1 widgets
     def resource_path(relative_path):
         """
-        Return absolute path to bundled resources.
+        Return the absolute path to a bundled/resource file.
 
-        Works for:
-        - Normal Python execution
-        - PyInstaller one-file builds
-        - PyInstaller .app bundles on macOS
+        In development (for example, when running from VS Code), the source
+        file is located inside the `src` directory, while resources such as
+        `assets/` are located one directory above `src`.
+
+        When running as a PyInstaller application, resources are copied into
+        PyInstaller's temporary bundle directory (`sys._MEIPASS`) by the
+        `--add-data` option.
+
+        This allows the exact same code to work both:
+        1. During development/debugging in VS Code
+        2. When the packaged .app is launched from Finder
         """
         if getattr(sys, "frozen", False):
-            # PyInstaller bundle
-            base_path = getattr(
-                sys,
-                "_MEIPASS",
-                os.path.dirname(sys.executable)
-            )
+            # PyInstaller:
+            # `--add-data "../assets:assets"` puts assets inside the bundle,
+            # so _MEIPASS is the correct base directory.
+            base_path = sys._MEIPASS
         else:
-            # Running from source
+            # Development / VS Code:
+            # VideoDownloader.py is inside `src`, while `assets` is one
+            # directory above `src`.
             base_path = os.path.dirname(
-                os.path.abspath(__file__)
+                os.path.dirname(os.path.abspath(__file__))
             )
 
         return os.path.join(base_path, relative_path)
@@ -180,17 +175,33 @@ try:
         root.update()
 
     def downloadVideo(url):
-        ydl_opts = {
-            'logger': YtDlpLogger(),
-            'progress_hooks': [my_hook],
-            'format': 'bestvideo+bestaudio[language=vi]/best',
-            'outtmpl': os.path.join(
-                app_dir,
-                '%(title)s [%(id)s].%(ext)s',
-            ),
-            # For mac when launching app from "Finder"
-            'ffmpeg_location': '/opt/homebrew/bin',
-        }
+
+        if platform.system() == "Darwin":
+            print("You're on macOS")
+        
+            ydl_opts = {
+                'logger': YtDlpLogger(),
+                'progress_hooks': [my_hook],
+                # Set video format, default to viet audio
+                'format': 'bestvideo+bestaudio[language=vi]/best',
+                'outtmpl': os.path.join(
+                    app_dir,
+                    '%(title)s [%(id)s].%(ext)s',
+                ),
+                # For mac when launching app from "Finder"
+                'ffmpeg_location': '/opt/homebrew/bin',
+            }
+        else:
+            ydl_opts = {
+                'logger': YtDlpLogger(),
+                'progress_hooks': [my_hook],
+                # Set video format, default to viet audio
+                'format': 'bestvideo+bestaudio[language=vi]/best',
+                'outtmpl': os.path.join(
+                    app_dir,
+                    '%(title)s [%(id)s].%(ext)s',
+                ),
+            }
 
         ydl = YoutubeDL(ydl_opts)
 
@@ -201,8 +212,8 @@ try:
         LOGGER.info("Custom extractor: %s", extractor.ie_key())
         LOGGER.info("URL matches extractor: %s", extractor.suitable(url))
 
-        print("Custom extractor:", extractor.ie_key())
-        print("URL matches:", extractor.suitable(url))
+        # print("Custom extractor:", extractor.ie_key())
+        # print("URL matches:", extractor.suitable(url))
 
         try:
             # Bypass yt-dlp extractor selection and call our extractor directly

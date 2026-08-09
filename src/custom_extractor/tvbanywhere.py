@@ -7,6 +7,7 @@ from yt_dlp.extractor.common import InfoExtractor
 class TVBAnywhereIE(InfoExtractor):
     IE_NAME = 'tvbanywhere'
 
+    # Define a valid URL so only this extractor is pick up by yt_dlp for TVBAnywhere
     _VALID_URL = r'https?://(?:www\.)?tvbanywherena\.com/(?:[a-z]{2}/)?watch/[^/?#]+/(?P<id>\d+)(?:[/?#].*)?$'
     
     _TESTS = [{
@@ -35,6 +36,7 @@ class TVBAnywhereIE(InfoExtractor):
 
         video_obj = None
 
+        # Look for one of type VideoObject and break
         for block in json_ld_blocks:
             try:
                 data = json.loads(block)
@@ -45,21 +47,24 @@ class TVBAnywhereIE(InfoExtractor):
                 video_obj = data
                 break
 
+        # Make sure it's a valid object
         if not video_obj:
             self.raise_no_formats(
                 'Unable to locate VideoObject',
                 expected=True,
             )
 
+        # Get embeded URL
         embed_url = video_obj.get('embedUrl')
 
+        # Make sure it's real
         if not embed_url:
             self.raise_no_formats(
                 'Unable to locate Brightcove embed URL',
                 expected=True,
             )
 
-        # Extract account ID
+        # Extract account ID from embed_url
         account_id = self._search_regex(
             r'players\.brightcove\.net/(\d+)/',
             embed_url,
@@ -73,7 +78,7 @@ class TVBAnywhereIE(InfoExtractor):
             note='Downloading Brightcove player',
         )
 
-        # Extract policy key
+        # Extract policy key from player_page
         policy_key = self._search_regex(
             r'policyKey["\']?\s*:\s*["\']([^"\']+)["\']',
             player_page,
@@ -93,6 +98,7 @@ class TVBAnywhereIE(InfoExtractor):
 
         formats = []
 
+        # Get all format type
         for source in playback.get('sources', []):
             src = source.get('src')
 
@@ -136,6 +142,7 @@ class TVBAnywhereIE(InfoExtractor):
 
         subtitles = {}
 
+        # Get all subtitles
         for track in playback.get('text_tracks', []):
             sub_url = track.get('src')
 
@@ -150,11 +157,13 @@ class TVBAnywhereIE(InfoExtractor):
 
         thumbnails = []
 
+        # Get thumbnails
         if playback.get('poster'):
             thumbnails.append({
                 'url': playback['poster'],
             })
 
+        # Return video's metadata
         return {
             'id': video_id,
             'title': playback.get('name'),
