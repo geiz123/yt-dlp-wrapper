@@ -4,7 +4,7 @@ Basic GUI for yt-dlp that download videos from streaming website.
 ## Build command
 Make sure you are in .venv
 ```
-cd /Users/geiz/Desktop/git/yt-dlp-wrapper/src
+cd src
 
 rm -rf build dist VideoDownloader.spec
 

@@ -14,6 +14,7 @@ import logging
 if getattr(sys, "frozen", False):
     # PyInstaller executable or .app bundle
     app_dir = Path(sys.executable)
+    app_dir = app_dir.parent
     # macOS .app bundle
     if sys.platform == "darwin":
         app_dir = app_dir.parents[3]  # folder containing MyApp.app
